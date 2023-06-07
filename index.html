@@ -33,7 +33,7 @@
           <th>Telefon raqami</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tbody">
         <tr>
           <td>Cobalt</td>
           <td>p455la</td>
@@ -45,12 +45,15 @@
           <td>Andijon kengash 122</td>
           <td>+998 90 838 33 84</td>
         </tr>
+      </tbody>
+      <tfoot>
         <tr>
           <td>
             <input
               type="text"
               placeholder="avtomobil turi"
               class="form-control"
+              id="car_type"
             />
           </td>
           <td>
@@ -58,16 +61,27 @@
               type="text"
               placeholder="avtomobil raqami"
               class="form-control"
+              id="car_number"
             />
           </td>
           <td>
-            <input type="text" placeholder="narxi" class="form-control" />
+            <input
+              type="text"
+              placeholder="narxi"
+              class="form-control"
+              id="price"
+            />
           </td>
           <td>
-            <input type="text" placeholder="foizi" class="form-control" />
+            <input
+              type="text"
+              placeholder="foizi"
+              class="form-control"
+              id="percentage"
+            />
           </td>
           <td>
-            <select name="" id="length" class="form-control">
+            <select id="length" class="form-control">
               <option selected disabled>Oyligi</option>
               <option value="1">1 oylik</option>
               <option value="2">2 oylik</option>
@@ -84,41 +98,85 @@
               <option value="18">18 oylik</option>
               <option value="24">24 oylik</option>
             </select>
-            -<span>200$</span>
+            -<span id="calculatedPrice"></span>
           </td>
           <td>
-            <button class="btn btn-outline-primary">Hisoblash</button>
+            <button
+              class="btn btn-outline-primary"
+              id="calculate"
+              onclick="calclulate()"
+            >
+              Hisoblash
+            </button>
           </td>
           <td>
-            <input type="text" placeholder="ismi" class="form-control" />
+            <input
+              type="text"
+              placeholder="ismi"
+              class="form-control"
+              id="name"
+            />
           </td>
           <td>
-            <input type="text" placeholder="manzili" class="form-control" />
+            <input
+              type="text"
+              placeholder="manzili"
+              class="form-control"
+              id="address"
+            />
           </td>
           <td>
             <input
               type="text"
               placeholder="telefon raqami"
               class="form-control"
+              id="phone_number"
             />
           </td>
           <td>
-            <button class="btn btn-primary">Qo'shish</button>
+            <button class="btn btn-primary" onclick="add()">Qo'shish</button>
           </td>
         </tr>
-      </tbody>
+      </tfoot>
     </table>
 
     <script>
-      function solve(month) {
-        var narx = document.getElementById("price").value;
-        var percent = +document.getElementById("foiz").value;
-        var f = (narx / 100) * percent;
-        console.log(f);
-        var cost = +narx + f;
-        console.log(cost);
+      function solve(price, percent, month) {
+        var f = (price / 100) * percent;
+        var cost = +price + f;
         cost = cost / month;
-        console.log(cost);
+        return cost;
+      }
+      function calclulate() {
+        var price = document.getElementById("price").value,
+          percentage = document.getElementById("percentage").value,
+          length = document.getElementById("length").value,
+          calculatedPrice = document.getElementById("calculatedPrice");
+        calculatedPrice.innerText = solve(+price, +percentage, length) + "$";
+      }
+      function add() {
+        var car_type = document.getElementById("car_type").value,
+          car_number = document.getElementById("car_number").value,
+          price = document.getElementById("price").value,
+          percentage = document.getElementById("percentage").value,
+          length = document.getElementById("length").value,
+          name = document.getElementById("name").value,
+          address = document.getElementById("address").value,
+          phone_number = document.getElementById("phone_number").value,
+          tr = document.createElement("tr");
+        tr.innerHTML += `
+                <td>${car_type}</td>
+                <td>${car_number}</td>
+                <td>${price}</td>
+                <td>${percentage}%</td>
+                <td>${length}-${solve(+price, +percentage, length)}$</td>
+                <td>12.05.2023</td>
+                <td>${name}</td>
+                <td>${address}</td>
+                <td>${phone_number}</td>
+                `;
+        tbody = document.getElementById("tbody");
+        tbody.appendChild(tr);
       }
     </script>
   </body>
